@@ -47,11 +47,7 @@ def test_read_users(client):
 def test_update_user(client):
     response = client.put(
         '/users/1',
-        json={
-            'username': 'bob',
-            'email': 'bob@example.com',
-            'password': 'secret'
-        }
+        json={'username': 'bob', 'email': 'bob@example.com', 'password': 'secret'},
     )
 
     assert response.status_code == HTTPStatus.OK
@@ -65,11 +61,7 @@ def test_update_user(client):
 def test_update_user_invalid(client):
     response = client.put(
         '/users/2',
-        json={
-            'username': 'bob',
-            'email': 'bob@example.com',
-            'password': 'secret'
-        }
+        json={'username': 'bob', 'email': 'bob@example.com', 'password': 'secret'},
     )
 
     assert response.status_code == HTTPStatus.NOT_FOUND
