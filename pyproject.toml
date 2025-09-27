@@ -29,6 +29,7 @@ dev = [
 
 [tool.ruff]
 extend-exclude = ['migrations']
+line-length = 120
 
 [tool.ruff.lint]
 preview = true
