@@ -19,9 +19,12 @@ def client():
 def session():
     engine = create_engine('sqlite:///:memory:')
     table_registry.metadata.create_all(engine)
-    with Session(engine) as session:
-        yield session
-    table_registry.metadata.drop_all(engine)
+    try:
+        with Session(engine) as session:
+            yield session
+    finally:
+        table_registry.metadata.drop_all(engine)
+        engine.dispose()
 
 
 @contextmanager
@@ -29,6 +32,9 @@ def _mock_db_time(model, time=datetime(2025, 5, 20)):
     def fake_time_hook(mapper, connection, target):
         if hasattr(target, 'created_at'):
             target.created_at = time
+
+        if hasattr(target, 'updated_at'):
+            target.updated_at = time
 
     event.listen(model, 'before_insert', fake_time_hook)
 
