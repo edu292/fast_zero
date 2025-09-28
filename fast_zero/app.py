@@ -63,8 +63,12 @@ def read_users(offset=0, limit=10, session: Session = Depends(get_session), curr
 
 
 @app.put('/users/{user_id}', response_model=UserPublic)
-def update_user(user_id: int, user: UserSchema, session: Session = Depends(get_session),
-                current_user: User = Depends(get_current_user)):
+def update_user(
+    user_id: int,
+    user: UserSchema,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
     if current_user.id != user_id:
         raise HTTPException(HTTPStatus.FORBIDDEN, detail='Not enough permissions')
 
@@ -92,7 +96,7 @@ def delete_user(user_id: int, session: Session = Depends(get_session), current_u
 
 
 @app.get('/users/{user_id}', response_model=UserPublic)
-def get_user(user_id: int, session: Session = Depends(get_session)):
+def get_user(user_id: int, session: Session = Depends(get_session), current_user: User = Depends(get_current_user)):
     user_db = session.scalar(select(User).where(User.id == user_id))
     if not user_db:
         raise HTTPException(HTTPStatus.NOT_FOUND, detail='User not found')

@@ -59,7 +59,7 @@ def test_update_user(client, user, token):
     response = client.put(
         '/users/1',
         json={'username': 'bob', 'email': 'bob@example.com', 'password': 'secret'},
-        headers={'Authorization': f'Bearer {token}'}
+        headers={'Authorization': f'Bearer {token}'},
     )
 
     assert response.status_code == HTTPStatus.OK
@@ -74,7 +74,7 @@ def test_update_user_forbidden(client, token):
     response = client.put(
         '/users/2',
         json={'username': 'bob', 'email': 'bob@example.com', 'password': 'secret'},
-        headers={'Authorization': f'Bearer {token}'}
+        headers={'Authorization': f'Bearer {token}'},
     )
 
     assert response.status_code == HTTPStatus.FORBIDDEN
@@ -112,7 +112,7 @@ def test_update_integrity_error(client, user, token):
             'username': 'fausto',
             'email': 'fausto@example.com',
             'password': 'secret',
-        }
+        },
     )
 
     response = client.put(
@@ -122,7 +122,7 @@ def test_update_integrity_error(client, user, token):
             'email': 'bob@example.com',
             'password': 'mynewpassword',
         },
-        headers={'Authorization': f'Bearer {token}'}
+        headers={'Authorization': f'Bearer {token}'},
     )
 
     assert response.status_code == HTTPStatus.CONFLICT
