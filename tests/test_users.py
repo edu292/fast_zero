@@ -93,20 +93,11 @@ def test_delete_user_forbidden(client, other_user, token):
     assert response.json() == {'detail': 'Not enough permissions'}
 
 
-def test_update_integrity_error(client, user, token):
-    client.post(
-        '/users',
-        json={
-            'username': 'fausto',
-            'email': 'fausto@example.com',
-            'password': 'secret',
-        },
-    )
-
+def test_update_integrity_error(client, user, other_user, token):
     response = client.put(
         f'/users/{user.id}',
         json={
-            'username': 'fausto',
+            'username': other_user.username,
             'email': 'bob@example.com',
             'password': 'mynewpassword',
         },
