@@ -1,13 +1,14 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 
-from fast_zero.routes import auth, users
+from fast_zero.routes import auth, todos, users
 from fast_zero.schemas import Message
 
 app = FastAPI(title='Fast Zero')
 
 app.include_router(users.router)
 app.include_router(auth.router)
+app.include_router(todos.router)
 
 
 @app.get('/', response_model=Message)
