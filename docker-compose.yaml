@@ -1,0 +1,36 @@
+services:
+  database:
+    image: 'postgres:17'
+    environment:
+      POSTGRES_USER: app_user
+      POSTGRES_DB: app_db
+      POSTGRES_PASSWORD: app_password
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U app_user -d app_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: '.'
+    ports:
+      - '80:8000'
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: 'postgresql+psycopg://app_user:app_password@database:5432/app_db'
+    env_file:
+      - .env
+    volumes:
+      - './entrypoint.sh:/entrypoint.sh'
+    entrypoint: >
+      sh -c "chmod +x /entrypoint.sh 
+      && /entrypoint.sh"
+
+volumes:
+  pgdata:

@@ -2,6 +2,7 @@ from dataclasses import asdict
 
 import pytest
 from sqlalchemy import select
+from sqlalchemy.exc import DataError
 
 from fast_zero.models import Todo, User
 
@@ -31,7 +32,5 @@ async def test_create_user(session, mock_db_time):
 async def test_create_todo(session, user):
     todo = Todo(title='Test', description='Test', state='Wrong', user_id=user.id)
     session.add(todo)
-    await session.commit()
-
-    with pytest.raises(LookupError):
-        await session.scalar(select(Todo))
+    with pytest.raises(DataError):
+        await session.commit()

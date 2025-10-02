@@ -1,9 +1,14 @@
+import asyncio
+import sys
+
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 
 from fast_zero.routes import auth, todos, users
 from fast_zero.schemas import Message
 
+if sys.platform == 'win32':
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 app = FastAPI(title='Fast Zero')
 
 app.include_router(users.router)
