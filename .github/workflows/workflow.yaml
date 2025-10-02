@@ -6,6 +6,9 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
+      - name: Copiar arquivos do repositório
+        uses: actions/checkou@v4
+
       - name: Instalar o Python
         uses: actions/setup-python@v5
         with:
